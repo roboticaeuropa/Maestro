@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from Device import Device
+from uart_device import Device
 import time
  
 #create servo object, set unlimited speed, move servo to 90 degrees angle

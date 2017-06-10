@@ -17,7 +17,7 @@ while (1):
 	print "ITERACION ",iter
 	iter=iter+1
         print "sensing..."
-        time.sleep(1.5)
+        time.sleep(0.5)
 	print "Distancia (min)=",pos_ini_min
 	print "Distancia (man)=",pos_ini_max
 	print ""
