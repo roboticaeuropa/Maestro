@@ -13,7 +13,7 @@ desv= int(round(speed*miles,0))
 print "desv=",desv
 
 speed_left=zero+speed+desv
-speed_right=zero+speed-desv
+speed_right=zero-speed+desv
 print "speed_left",speed_left
 print "speed_right",speed_right
 
