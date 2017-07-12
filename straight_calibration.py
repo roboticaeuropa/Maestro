@@ -11,10 +11,9 @@ miles   = 0.15
 
 desv= int(round(speed*miles,0))
 print "desv=",desv
-speed_desv=speed+desv
 
-speed_left=zero+speed_desv
-speed_right=zero-speed_desv
+speed_left=zero+speed+desv
+speed_right=zero+speed-desv
 print "speed_left",speed_left
 print "speed_right",speed_right
 
