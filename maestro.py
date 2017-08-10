@@ -12,7 +12,7 @@ import serial
 # These functions provide access to many of the Maestro's capabilities using the
 # Pololu serial protocol
 #
-class Controller:
+class Controller():
     # When connected via USB, the Maestro creates two virtual serial ports
     # /dev/ttyACM0 for commands and /dev/ttyACM1 for communications.
     # Be sure the Maestro is configured for "USB Dual Port" serial mode.
@@ -24,7 +24,7 @@ class Controller:
     # assumes.  If two or more controllers are connected to different serial
     # ports, or you are using a Windows OS, you can provide the port name.  For
     # example, '/dev/ttyACM2' or for Windows, something like 'COM3'.
-    def __init__(self,ttyStr='/dev/ttyACM0'):
+    def __init__(self, ttyStr="/dev/maestro"):
         # Open the command port
         self.usb = serial.Serial(ttyStr)
         # Command lead-in and device 12 are sent for each Pololu serial commands.
@@ -69,6 +69,26 @@ class Controller:
     # If channel is configured for digital output, values < 6000 = Low ouput
     def setTarget(self, chan, target):
         # if Min is defined and Target is below, force to Min
+        if self.Mins[chan] > 0 and target < self.Mins[chan]:
+            target = self.Mins[chan]
+        # if Max is defined and Target is above, force to Max
+        if self.Maxs[chan] > 0 and target > self.Maxs[chan]:
+            target = self.Maxs[chan]
+        #
+        lsb = target & 0x7f #7 bits for least significant byte
+        msb = (target >> 7) & 0x7f #shift 7 and take next 7 bits for msb
+        # Send Pololu intro, device number, command, channel, and target lsb/msb
+        cmd = self.PololuCmd + chr(0x04) + chr(chan) + chr(lsb) + chr(msb)
+        self.usb.write(cmd)
+        # Record Target value
+        self.Targets[chan] = target
+
+    def setTargetA(self, chan, zero, cms, rotationDirection):
+        sp_qus=int(round((cms-1.53)/0.026))
+	if rotationDirection == -1:
+		sp_qus=-1*sp_qus
+	target=zero+sp_qus
+	# if Min is defined and Target is below, force to Min
         if self.Mins[chan] > 0 and target < self.Mins[chan]:
             target = self.Mins[chan]
         # if Max is defined and Target is above, force to Max
