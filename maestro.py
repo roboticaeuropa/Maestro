@@ -12,6 +12,19 @@ import serial
 # These functions provide access to many of the Maestro's capabilities using the
 # Pololu serial protocol
 #
+locations=['/dev/ttyACM0', '/dev/ttyACM2']
+for device in locations:
+   try:
+      #print "Trying...",device
+      serialport = serial.Serial(device, 2400, timeout = 0)
+      right_dev=device
+      break
+   except:
+      #print "Failed to connect on",device
+      if device == 'end':
+         print "Unable to find Serial Port, Please plug in cable or check cable connections."
+         exit()
+
 class Controller():
     # When connected via USB, the Maestro creates two virtual serial ports
     # /dev/ttyACM0 for commands and /dev/ttyACM1 for communications.
@@ -24,7 +37,7 @@ class Controller():
     # assumes.  If two or more controllers are connected to different serial
     # ports, or you are using a Windows OS, you can provide the port name.  For
     # example, '/dev/ttyACM2' or for Windows, something like 'COM3'.
-    def __init__(self, ttyStr="/dev/maestro"):
+    def __init__(self, ttyStr=right_dev):
         # Open the command port
         self.usb = serial.Serial(ttyStr)
         # Command lead-in and device 12 are sent for each Pololu serial commands.
