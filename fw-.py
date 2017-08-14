@@ -8,8 +8,8 @@ speed=10
 #right_fw_speed=5500
 
 s=m.Controller()
-s.setTargetA(4,5850,speed,1)
-s.setTargetA(5,5850,speed,-1)
+s.setTargetA(4,speed,5850,1)
+s.setTargetA(5,speed,5850,-1)
 
 time.sleep(2)
 
