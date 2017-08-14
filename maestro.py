@@ -12,6 +12,8 @@ import serial
 # These functions provide access to many of the Maestro's capabilities using the
 # Pololu serial protocol
 #
+# With these following lines, we will automatically identify the name of the serial
+# port where the Maestro is plugged in.
 locations=['/dev/ttyACM0', '/dev/ttyACM2']
 for device in locations:
    try:
@@ -95,9 +97,13 @@ class Controller():
         self.usb.write(cmd)
         # Record Target value
         self.Targets[chan] = target
-
+    
+    # This method includes some improvements compared to setTarget. You can
+    # introduce the "zero" speed, which is a value that changes in each servo,
+    # you can write the speed in cm/s and you can control the rotation direction.
     def setTargetA(self, chan, zero, cms, rotationDirection):
-        sp_qus=int(round((cms-1.53)/0.026))
+        # Conversion from quarter-microseconds to cm/s
+	sp_qus=int(round((cms-1.53)/0.026))
 	if rotationDirection == -1:
 		sp_qus=-1*sp_qus
 	target=zero+sp_qus
