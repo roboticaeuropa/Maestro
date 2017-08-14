@@ -101,8 +101,13 @@ class Controller():
     # This method includes some improvements compared to setTarget. You can
     # introduce the "zero" speed, which is a value that changes in each servo,
     # you can write the speed in cm/s and you can control the rotation direction.
-    def setTargetA(self, chan, zero, cms, rotationDirection):
-        # Conversion from quarter-microseconds to cm/s
+    def setTargetA(self, chan, cms, zero=None, rotationDirection=None):
+        
+    # Conversion from quarter-microseconds to cm/s
+	if zero is None:
+		zero=6000
+	if rotationDirection is None:
+		rotationDirection=1
 	sp_qus=int(round((cms-1.53)/0.026))
 	if rotationDirection == -1:
 		sp_qus=-1*sp_qus
